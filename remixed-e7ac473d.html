@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlock WhatsApp AI Assistant</title>
+    <meta name="description" content="Choose what you like, and we'll launch a tailored assistant on WhatsApp.">
+    <style>
+        :root {
+            --primary: #1d9bf0;
+            --primary-dark: #1a8cd8;
+            --success: #00ba7c;
+            --text: #0f1419;
+            --text-secondary: #536471;
+            --bg: #ffffff;
+            --bg-secondary: #f7f9fa;
+            --border: #cfd9de;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+            --radius: 20px;
+            --radius-small: 8px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding-bottom: 120px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            background: var(--text);
+            border-radius: var(--spacing-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Preferences */
+        .preferences {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .preference-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .preference-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+
+        .chip {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .chip:hover {
+            border-color: var(--primary);
+        }
+
+        .chip:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .chip.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Search */
+        .search-container {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-small);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Counter */
+        .counter {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .limit-hint {
+            font-size: 0.75rem;
+            color: #f45d22;
+            margin-top: var(--spacing-xs);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .limit-hint.show {
+            opacity: 1;
+        }
+
+        /* Industry Grid */
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        @media (min-width: 640px) {
+            .industry-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .industry-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .tile {
+            position: relative;
+            aspect-ratio: 1;
+            border: none;
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            background: var(--bg-secondary);
+            outline: none;
+        }
+
+        .tile:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .tile:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .tile.selected {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            outline: 3px solid var(--primary);
+        }
+
+        .tile.selected::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(29, 155, 240, 0.2);
+            z-index: 2;
+        }
+
+        .tile.selected::after {
+            content: '✓';
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .tile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tile-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+            z-index: 1;
+        }
+
+        .tile-title {
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* Sticky Footer */
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: var(--spacing-md);
+            padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
+            z-index: 100;
+        }
+
+        .continue-btn {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-small);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .continue-btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+
+        .continue-btn:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .continue-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .tile,
+            .continue-btn,
+            .chip,
+            .limit-hint {
+                transition: none;
+            }
+            
+            .tile:hover {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: var(--spacing-md);
+            }
+            
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">X</div>
+            <div class="hero">
+                <h1>Unlock WhatsApp AI Assistant</h1>
+                <p>Choose what you like, and we'll launch a tailored assistant on WhatsApp.</p>
+            </div>
+        </header>
+
+        <!-- Quick Preferences -->
+        <div class="preferences">
+            <div class="preference-group">
+                <div class="preference-label">Region</div>
+                <div class="chip-row" data-preference="region">
+                    <button class="chip selected" data-value="Saudi" aria-pressed="true">🇸🇦 Saudi</button>
+                    <button class="chip" data-value="MENA" aria-pressed="false">🌍 MENA</button>
+                    <button class="chip" data-value="Global" aria-pressed="false">🌐 Global</button>
+                    <button class="chip" data-value="US" aria-pressed="false">🇺🇸 US</button>
+                    <button class="chip" data-value="EU" aria-pressed="false">🇪🇺 EU</button>
+                </div>
+            </div>
+
+            <div class="preference-group">
+                <div class="preference-label">Tone</div>
+                <div class="chip-row" data-preference="tone">
+                    <button class="chip selected" data-value="Professional" aria-pressed="true">💼 Professional</button>
+                    <button class="chip" data-value="Friendly" aria-pressed="false">😊 Friendly</button>
+                    <button class="chip" data-value="Technical" aria-pressed="false">🔧 Technical</button>
+                </div>
+            </div>
+
+            <div class="preference-group">
+                <div class="preference-label">Depth</div>
+                <div class="chip-row" data-preference="depth">
+                    <button class="chip selected" data-value="Concise" aria-pressed="true">⚡ Concise</button>
+                    <button class="chip" data-value="Detailed" aria-pressed="false">📖 Detailed</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-container">
+            <input type="text" id="search" class="search-input" placeholder="Search industries..." autocomplete="off">
+        </div>
+
+        <!-- Counter -->
+        <div class="counter" id="counter">Selected: 0 / 6</div>
+        <div class="limit-hint" id="limit-hint">Maximum 6 industries allowed</div>
+
+        <!-- BUTTON-GRID:START -->
+        <div class="industry-grid" id="industry-grid">
+            <!-- Industries will be populated by JavaScript -->
+        </div>
+        <!-- BUTTON-GRID:END -->
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="sticky-footer">
+        <button id="continue-btn" class="continue-btn" disabled>Continue</button>
+    </div>
+
+    <script>
+        // ============= CONFIGURATION =============
+        // TODO: Replace with your actual WhatsApp number and webhook URL
+        const WHATSAPP_NUMBER = "9665XXXXXXXX";
+        const N8N_WEBHOOK_URL = "https://YOUR_N8N/webhook/launch";
+        
+        const MIN_SELECT = 1;
+        const MAX_SELECT = 6;
+        const SEND_TO_N8N = true;
+        // ==========================================
+
+        const INDUSTRIES = [
+            { id: 'healthcare', title: 'Healthcare', img: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&h=600&fit=crop&crop=center', alt: 'Healthcare technology with medical professionals and digital interfaces' },
+            { id: 'logistics-supply-chain', title: 'Logistics & Supply Chain', img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=600&fit=crop&crop=center', alt: 'Transportation and logistics with trucks and digital tracking' },
+            { id: 'retail-ecommerce', title: 'Retail & eCommerce', img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=600&fit=crop&crop=center', alt: 'E-commerce shopping cart on tablet with digital interface' },
+            { id: 'banking-financial', title: 'Banking & Financial Services', img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=600&fit=crop&crop=center', alt: 'Financial charts and data analysis on digital screens' },
+            { id: 'energy-utilities', title: 'Energy & Utilities', img: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=600&fit=crop&crop=center', alt: 'Solar panels and wind turbines in energy infrastructure' },
+            { id: 'education-edtech', title: 'Education & EdTech', img: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=600&fit=crop&crop=center', alt: 'Educational technology with students and digital learning tools' },
+            { id: 'government-public', title: 'Government & Public Sector', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=600&fit=crop&crop=center', alt: 'Government building representing public sector services' },
+            { id: 'manufacturing', title: 'Manufacturing', img: 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?w=600&h=600&fit=crop&crop=center', alt: 'Modern manufacturing facility with robotic automation' },
+            { id: 'real-estate', title: 'Real Estate', img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=600&fit=crop&crop=center', alt: 'Modern real estate development and construction' },
+            { id: 'travel-hospitality', title: 'Travel & Hospitality', img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=600&fit=crop&crop=center', alt: 'Travel and hospitality icons with airplane and vacation symbols' },
+            { id: 'media-entertainment', title: 'Media & Entertainment', img: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&h=600&fit=crop&crop=center', alt: 'Media and entertainment production equipment' },
+            { id: 'agriculture-food', title: 'Agriculture & Food', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&h=600&fit=crop&crop=center', alt: 'Fresh agricultural produce and farming' },
+            { id: 'construction', title: 'Construction', img: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&h=600&fit=crop&crop=center', alt: 'Construction site with modern building development' },
+            { id: 'transportation', title: 'Transportation', img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=600&fit=crop&crop=center', alt: 'Transportation vehicles and logistics systems' },
+            { id: 'telecommunications', title: 'Telecommunications', img: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=600&fit=crop&crop=center', alt: 'Telecommunications tower and network infrastructure' },
+            { id: 'technology-saas-ai', title: 'Technology (SaaS & AI)', img: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=600&fit=crop&crop=center', alt: 'AI and SaaS technology with futuristic digital interface' },
+            { id: 'pharma-biotech', title: 'Pharmaceuticals & Biotech', img: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&h=600&fit=crop&crop=center', alt: 'Pharmaceutical laboratory with research equipment' },
+            { id: 'insurance', title: 'Insurance', img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=600&fit=crop&crop=center', alt: 'Insurance and risk management concepts' }
+        ];
+
+        // State
+        const state = {
+            selectedIndustries: new Set(),
+            preferences: {
+                region: 'Saudi',
+                tone: 'Professional',
+                depth: 'Concise'
+            }
+        };
+
+        // DOM elements
+        const industryGrid = document.getElementById('industry-grid');
+        const continueBtn = document.getElementById('continue-btn');
+        const counter = document.getElementById('counter');
+        const searchInput = document.getElementById('search');
+        const limitHint = document.getElementById('limit-hint');
+
+        // Helper function
+        function urlEncode(str) {
+            return encodeURIComponent(str);
+        }
+
+        // Initialize
+        function init() {
+            renderIndustries();
+            setupPreferences();
+            setupSearch();
+            updateUI();
+        }
+
+        // Render industry tiles
+        function renderIndustries() {
+            industryGrid.innerHTML = INDUSTRIES.map(industry => `
+                <button class="tile" 
+                        data-industry-id="${industry.id}" 
+                        data-title="${industry.title}"
+                        aria-pressed="false">
+                    <img class="tile-image" src="${industry.img}" alt="${industry.alt}" loading="lazy">
+                    <div class="tile-overlay">
+                        <div class="tile-title">${industry.title}</div>
+                    </div>
+                </button>
+            `).join('');
+
+            // Add event listeners
+            industryGrid.addEventListener('click', handleTileClick);
+            industryGrid.addEventListener('keydown', handleTileKeydown);
+        }
+
+        // Handle tile click
+        function handleTileClick(e) {
+            const tile = e.target.closest('.tile');
+            if (!tile) return;
+            toggleTile(tile);
+        }
+
+        // Handle tile keyboard
+        function handleTileKeydown(e) {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                const tile = e.target.closest('.tile');
+                if (tile) toggleTile(tile);
+            }
+        }
+
+        // Toggle tile selection
+        function toggleTile(tile) {
+            const industryId = tile.dataset.industryId;
+            const title = tile.dataset.title;
+
+            if (state.selectedIndustries.has(industryId)) {
+                // Deselect
+                state.selectedIndustries.delete(industryId);
+                tile.classList.remove('selected');
+                tile.setAttribute('aria-pressed', 'false');
+                
+                window.dispatchEvent(new CustomEvent('tile:toggle', {
+                    detail: { id: industryId, title, selected: false }
+                }));
+            } else {
+                // Check max limit
+                if (state.selectedIndustries.size >= MAX_SELECT) {
+                    limitHint.classList.add('show');
+                    setTimeout(() => limitHint.classList.remove('show'), 3000);
+                    return;
+                }
+
+                // Select
+                state.selectedIndustries.add(industryId);
+                tile.classList.add('selected');
+                tile.setAttribute('aria-pressed', 'true');
+                
+                window.dispatchEvent(new CustomEvent('tile:toggle', {
+                    detail: { id: industryId, title, selected: true }
+                }));
+            }
+
+            updateUI();
+        }
+
+        // Setup preferences
+        function setupPreferences() {
+            document.querySelectorAll('[data-preference]').forEach(group => {
+                const prefType = group.dataset.preference;
+                group.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('chip')) {
+                        // Deselect all in group
+                        group.querySelectorAll('.chip').forEach(chip => {
+                            chip.classList.remove('selected');
+                            chip.setAttribute('aria-pressed', 'false');
+                        });
+                        
+                        // Select clicked chip
+                        e.target.classList.add('selected');
+                        e.target.setAttribute('aria-pressed', 'true');
+                        
+                        // Update state
+                        state.preferences[prefType] = e.target.dataset.value;
+                    }
+                });
+            });
+        }
+
+        // Setup search
+        function setupSearch() {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                
+                document.querySelectorAll('.tile').forEach(tile => {
+                    const title = tile.dataset.title.toLowerCase();
+                    const shouldShow = !query || title.includes(query);
+                    
+                    tile.classList.toggle('hidden', !shouldShow);
+                });
+            });
+        }
+
+        // Update UI
+        function updateUI() {
+            const selectedCount = state.selectedIndustries.size;
+            
+            // Update counter
+            counter.textContent = `Selected: ${selectedCount} / ${MAX_SELECT}`;
+            
+            // Update continue button
+            continueBtn.disabled = selectedCount < MIN_SELECT;
+        }
+
+        // Handle continue
+        continueBtn.addEventListener('click', async () => {
+            if (state.selectedIndustries.size < MIN_SELECT) return;
+
+            // Get selected industry titles
+            const selectedIndustryTitles = Array.from(state.selectedIndustries).map(industryId => {
+                const industry = INDUSTRIES.find(i => i.id === industryId);
+                return industry ? industry.title : industryId;
+            });
+
+            // Build WhatsApp message
+            const message = `Hi! I picked industries: ${selectedIndustryTitles.join(', ')}.
+Region: ${state.preferences.region}. Tone: ${state.preferences.tone}. Depth: ${state.preferences.depth}.
+Please start the WhatsApp AI Assistant tailored to these industries.`;
+
+            // Send to n8n webhook (non-blocking)
+            if (SEND_TO_N8N && N8N_WEBHOOK_URL !== "https://YOUR_N8N/webhook/launch") {
+                const payload = {
+                    industries: selectedIndustryTitles,
+                    region: state.preferences.region,
+                    tone: state.preferences.tone,
+                    depth: state.preferences.depth,
+                    selectedCount: selectedIndustryTitles.length,
+                    userAgent: navigator.userAgent,
+                    ts: new Date().toISOString(),
+                    utm: Object.fromEntries(new URLSearchParams(location.search))
+                };
+
+                try {
+                    const payloadBlob = new Blob([JSON.stringify(payload)], {
+                        type: 'application/json'
+                    });
+
+                    if (navigator.sendBeacon) {
+                        navigator.sendBeacon(N8N_WEBHOOK_URL, payloadBlob);
+                    } else {
+                        fetch(N8N_WEBHOOK_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        }).catch(() => {}); // Ignore errors
+                    }
+                } catch (error) {
+                    // Ignore errors, don't block redirect
+                }
+            }
+
+            // Build WhatsApp deep link
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${urlEncode(message)}`;
+            
+            // Redirect to WhatsApp
+            window.location.href = whatsappUrl;
+        });
+
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>
