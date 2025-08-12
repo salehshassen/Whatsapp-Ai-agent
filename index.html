@@ -367,26 +367,6 @@
         <!-- Quick Preferences -->
         <div class="preferences">
             <div class="preference-group">
-                <div class="preference-label">Region</div>
-                <div class="chip-row" data-preference="region">
-                    <button class="chip selected" data-value="Saudi" aria-pressed="true">🇸🇦 Saudi</button>
-                    <button class="chip" data-value="MENA" aria-pressed="false">🌍 MENA</button>
-                    <button class="chip" data-value="Global" aria-pressed="false">🌐 Global</button>
-                    <button class="chip" data-value="US" aria-pressed="false">🇺🇸 US</button>
-                    <button class="chip" data-value="EU" aria-pressed="false">🇪🇺 EU</button>
-                </div>
-            </div>
-
-            <div class="preference-group">
-                <div class="preference-label">Tone</div>
-                <div class="chip-row" data-preference="tone">
-                    <button class="chip selected" data-value="Professional" aria-pressed="true">💼 Professional</button>
-                    <button class="chip" data-value="Friendly" aria-pressed="false">😊 Friendly</button>
-                    <button class="chip" data-value="Technical" aria-pressed="false">🔧 Technical</button>
-                </div>
-            </div>
-
-            <div class="preference-group">
                 <div class="preference-label">Depth</div>
                 <div class="chip-row" data-preference="depth">
                     <button class="chip selected" data-value="Concise" aria-pressed="true">⚡ Concise</button>
@@ -401,8 +381,8 @@
         </div>
 
         <!-- Counter -->
-        <div class="counter" id="counter">Selected: 0 / 6</div>
-        <div class="limit-hint" id="limit-hint">Maximum 6 industries allowed</div>
+        <div class="counter" id="counter">Selected: 0 / 1</div>
+        <div class="limit-hint" id="limit-hint">Please select 1 industry</div>
 
         <!-- BUTTON-GRID:START -->
         <div class="industry-grid" id="industry-grid">
@@ -418,42 +398,34 @@
 
     <script>
         // ============= CONFIGURATION =============
-        // TODO: Replace with your actual WhatsApp number and webhook URL
         const WHATSAPP_NUMBER = "9665XXXXXXXX";
-        const N8N_WEBHOOK_URL = "https://YOUR_N8N/webhook/launch";
+        const N8N_WEBHOOK_URL = "https://salehrad.app.n8n.cloud/webhook-test/send-industry";
         
         const MIN_SELECT = 1;
-        const MAX_SELECT = 6;
+        const MAX_SELECT = 1;
         const SEND_TO_N8N = true;
         // ==========================================
 
         const INDUSTRIES = [
-            { id: 'healthcare', title: 'Healthcare', img: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&h=600&fit=crop&crop=center', alt: 'Healthcare technology with medical professionals and digital interfaces' },
-            { id: 'logistics-supply-chain', title: 'Logistics & Supply Chain', img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=600&fit=crop&crop=center', alt: 'Transportation and logistics with trucks and digital tracking' },
-            { id: 'retail-ecommerce', title: 'Retail & eCommerce', img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=600&fit=crop&crop=center', alt: 'E-commerce shopping cart on tablet with digital interface' },
-            { id: 'banking-financial', title: 'Banking & Financial Services', img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=600&fit=crop&crop=center', alt: 'Financial charts and data analysis on digital screens' },
-            { id: 'energy-utilities', title: 'Energy & Utilities', img: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=600&fit=crop&crop=center', alt: 'Solar panels and wind turbines in energy infrastructure' },
-            { id: 'education-edtech', title: 'Education & EdTech', img: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=600&fit=crop&crop=center', alt: 'Educational technology with students and digital learning tools' },
-            { id: 'government-public', title: 'Government & Public Sector', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=600&fit=crop&crop=center', alt: 'Government building representing public sector services' },
-            { id: 'manufacturing', title: 'Manufacturing', img: 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?w=600&h=600&fit=crop&crop=center', alt: 'Modern manufacturing facility with robotic automation' },
-            { id: 'real-estate', title: 'Real Estate', img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=600&fit=crop&crop=center', alt: 'Modern real estate development and construction' },
-            { id: 'travel-hospitality', title: 'Travel & Hospitality', img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=600&fit=crop&crop=center', alt: 'Travel and hospitality icons with airplane and vacation symbols' },
-            { id: 'media-entertainment', title: 'Media & Entertainment', img: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&h=600&fit=crop&crop=center', alt: 'Media and entertainment production equipment' },
-            { id: 'agriculture-food', title: 'Agriculture & Food', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&h=600&fit=crop&crop=center', alt: 'Fresh agricultural produce and farming' },
-            { id: 'construction', title: 'Construction', img: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&h=600&fit=crop&crop=center', alt: 'Construction site with modern building development' },
-            { id: 'transportation', title: 'Transportation', img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=600&fit=crop&crop=center', alt: 'Transportation vehicles and logistics systems' },
-            { id: 'telecommunications', title: 'Telecommunications', img: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=600&fit=crop&crop=center', alt: 'Telecommunications tower and network infrastructure' },
-            { id: 'technology-saas-ai', title: 'Technology (SaaS & AI)', img: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=600&fit=crop&crop=center', alt: 'AI and SaaS technology with futuristic digital interface' },
-            { id: 'pharma-biotech', title: 'Pharmaceuticals & Biotech', img: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&h=600&fit=crop&crop=center', alt: 'Pharmaceutical laboratory with research equipment' },
-            { id: 'insurance', title: 'Insurance', img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=600&fit=crop&crop=center', alt: 'Insurance and risk management concepts' }
+            { id: 'healthcare', title: 'Healthcare', img: '/img/healthcare.jpg', alt: 'Healthcare with medical team and digital interfaces' },
+            { id: 'telecommunications', title: 'Telecommunication', img: '/img/telecommunication.jpg', alt: 'Telecommunication tower and network infrastructure' },
+            { id: 'banking-financial', title: 'Financial Services', img: '/img/financial-services.jpg', alt: 'Financial charts and analyst drawing growth graph' },
+            { id: 'energy-utilities', title: 'Energy', img: '/img/energy.jpg', alt: 'Solar, wind turbines, and power station' },
+            { id: 'retail-ecommerce', title: 'E-commerce', img: '/img/ecommerce.jpg', alt: 'Shopping cart on a tablet with digital icons' },
+            { id: 'education-edtech', title: 'Education & EdTech', img: '/img/education-edtech.jpg', alt: 'EdTech people, laptops, and learning icons' },
+            { id: 'technology-saas-ai', title: 'Technology (SaaS & AI)', img: '/img/technology-saas-ai.jpg', alt: 'AI robots and SaaS interface in a futuristic setup' },
+            { id: 'agriculture-food', title: 'Agriculture', img: '/img/agriculture.jpg', alt: 'Farmer harvesting fresh produce' },
+            { id: 'logistics-supply-chain', title: 'Transportation & Logistics', img: '/img/transport-logistics.jpg', alt: 'Trucks, containers, and tablet for logistics tracking' },
+            { id: 'manufacturing', title: 'Manufacturing', img: '/img/manufacturing.jpg', alt: 'Automated factory assembly line with robots' },
+            { id: 'travel-hospitality', title: 'Travel & Hospitality', img: '/img/travel-hospitality.jpg', alt: 'Airplane and travel/hotel icons' },
+            { id: 'pharma-biotech', title: 'Pharmaceuticals', img: '/img/pharmaceuticals.jpg', alt: 'Sterile pharmaceutical production line with staff' },
+            { id: 'government-public', title: 'Government & Public Sector', img: '/img/government-public.jpg', alt: 'Public sector icons over a hand' }
         ];
 
         // State
         const state = {
             selectedIndustries: new Set(),
             preferences: {
-                region: 'Saudi',
-                tone: 'Professional',
                 depth: 'Concise'
             }
         };
@@ -468,6 +440,31 @@
         // Helper function
         function urlEncode(str) {
             return encodeURIComponent(str);
+        }
+
+        // Send data to n8n webhook
+        async function sendToWebhook(data) {
+            try {
+                const response = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    console.log('Data sent successfully to n8n:', data);
+                    alert('Data sent successfully!');
+                    return true;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Error sending data to n8n:', error);
+                alert(`Error sending data: ${error.message}`);
+                return false;
+            }
         }
 
         // Initialize
@@ -528,14 +525,14 @@
                     detail: { id: industryId, title, selected: false }
                 }));
             } else {
-                // Check max limit
-                if (state.selectedIndustries.size >= MAX_SELECT) {
-                    limitHint.classList.add('show');
-                    setTimeout(() => limitHint.classList.remove('show'), 3000);
-                    return;
-                }
+                // For single selection, clear all others first
+                state.selectedIndustries.clear();
+                document.querySelectorAll('.tile').forEach(t => {
+                    t.classList.remove('selected');
+                    t.setAttribute('aria-pressed', 'false');
+                });
 
-                // Select
+                // Select this one
                 state.selectedIndustries.add(industryId);
                 tile.classList.add('selected');
                 tile.setAttribute('aria-pressed', 'true');
@@ -606,42 +603,28 @@
                 return industry ? industry.title : industryId;
             });
 
-            // Build WhatsApp message
-            const message = `Hi! I picked industries: ${selectedIndustryTitles.join(', ')}.
-Region: ${state.preferences.region}. Tone: ${state.preferences.tone}. Depth: ${state.preferences.depth}.
-Please start the WhatsApp AI Assistant tailored to these industries.`;
+            // Prepare data for n8n webhook
+            const webhookData = {
+                industry: selectedIndustryTitles.join(', '),
+                industries: selectedIndustryTitles,
+                depth: state.preferences.depth,
+                selectedCount: selectedIndustryTitles.length,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
 
-            // Send to n8n webhook (non-blocking)
-            if (SEND_TO_N8N && N8N_WEBHOOK_URL !== "https://YOUR_N8N/webhook/launch") {
-                const payload = {
-                    industries: selectedIndustryTitles,
-                    region: state.preferences.region,
-                    tone: state.preferences.tone,
-                    depth: state.preferences.depth,
-                    selectedCount: selectedIndustryTitles.length,
-                    userAgent: navigator.userAgent,
-                    ts: new Date().toISOString(),
-                    utm: Object.fromEntries(new URLSearchParams(location.search))
-                };
-
-                try {
-                    const payloadBlob = new Blob([JSON.stringify(payload)], {
-                        type: 'application/json'
-                    });
-
-                    if (navigator.sendBeacon) {
-                        navigator.sendBeacon(N8N_WEBHOOK_URL, payloadBlob);
-                    } else {
-                        fetch(N8N_WEBHOOK_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        }).catch(() => {}); // Ignore errors
-                    }
-                } catch (error) {
-                    // Ignore errors, don't block redirect
+            // Send to n8n webhook
+            if (SEND_TO_N8N) {
+                const success = await sendToWebhook(webhookData);
+                if (!success) {
+                    return; // Don't proceed to WhatsApp if webhook fails
                 }
             }
+
+            // Build WhatsApp message
+            const message = `Hi! I picked industry: ${selectedIndustryTitles.join(', ')}.
+Depth: ${state.preferences.depth}.
+Please start the WhatsApp AI Assistant tailored to this industry.`;
 
             // Build WhatsApp deep link
             const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${urlEncode(message)}`;
