@@ -593,7 +593,7 @@
             continueBtn.disabled = selectedCount < MIN_SELECT;
         }
 
-        // Handle continue
+        // Handle continue - ORIGINAL FUNCTION (will be overridden by Telegram routing script below)
         continueBtn.addEventListener('click', async () => {
             if (state.selectedIndustries.size < MIN_SELECT) return;
 
@@ -635,6 +635,118 @@ Please start the WhatsApp AI Assistant tailored to this industry.`;
 
         // Initialize app
         init();
+    </script>
+
+    <!-- Telegram Routing Script for Financial Services -->
+    <script>
+    (function () {
+        const TELE_WEB = 'https://t.me/SalehTeleAibot?start=financial_services';
+        const TELE_APP = 'tg://resolve?domain=SalehTeleAibot&start=financial_services';
+        const WHATSAPP_NUMBER = "9665XXXXXXXX"; // Use same as above
+
+        // Track selected service
+        let selectedService = null;
+
+        // Monitor tile selections to track the selected service
+        window.addEventListener('tile:toggle', (e) => {
+            if (e.detail.selected) {
+                const serviceTitle = e.detail.title.toLowerCase().trim();
+                selectedService = serviceTitle.replace(/\s+/g, '-');
+                console.log('Selected service:', selectedService);
+            }
+        });
+
+        // Find the continue button
+        const continueBtn = document.querySelector('#continue-btn') ||
+                           document.querySelector('.continue-btn') ||
+                           document.querySelector('[data-continue]');
+
+        if (continueBtn) {
+            // Override the continue button click handler
+            continueBtn.addEventListener('click', async (e) => {
+                // Only intercept if Financial Services is selected
+                if (selectedService === 'financial-services') {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Analytics/logging
+                    if (window.dataLayer) {
+                        window.dataLayer.push({
+                            event: 'service_route',
+                            service: 'financial_services',
+                            dest: 'telegram'
+                        });
+                    } else {
+                        console.log('route → telegram (financial_services)');
+                    }
+
+                    // Still need to send to n8n webhook first
+                    if (state.selectedIndustries.size < MIN_SELECT) return;
+
+                    const selectedIndustryTitles = Array.from(state.selectedIndustries).map(industryId => {
+                        const industry = INDUSTRIES.find(i => i.id === industryId);
+                        return industry ? industry.title : industryId;
+                    });
+
+                    const webhookData = {
+                        industry: selectedIndustryTitles.join(', '),
+                        industries: selectedIndustryTitles,
+                        depth: state.preferences.depth,
+                        selectedCount: selectedIndustryTitles.length,
+                        timestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent,
+                        destination: 'telegram' // Add this to track routing
+                    };
+
+                    // Send to n8n webhook
+                    if (SEND_TO_N8N) {
+                        try {
+                            const response = await fetch(N8N_WEBHOOK_URL, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(webhookData)
+                            });
+                            
+                            if (!response.ok) {
+                                console.warn('Webhook failed, but continuing to Telegram');
+                            }
+                        } catch (error) {
+                            console.warn('Webhook error:', error);
+                        }
+                    }
+
+                    // Try to open Telegram app, then fall back to web
+                    const start = Date.now();
+                    try {
+                        window.location = TELE_APP;
+                        
+                        setTimeout(() => {
+                            // If app didn't take focus quickly, fall back to web link
+                            if (Date.now() - start < 1200) {
+                                const a = document.createElement('a');
+                                a.href = TELE_WEB;
+                                a.target = '_blank';
+                                a.rel = 'noopener';
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                            }
+                        }, 800);
+                    } catch (error) {
+                        // Fallback to web link immediately if app link fails
+                        const a = document.createElement('a');
+                        a.href = TELE_WEB;
+                        a.target = '_blank';
+                        a.rel = 'noopener';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+                }
+                // For non-Financial Services, let the original handler run
+            }, true); // Use capture phase to intercept before the original handler
+        }
+    })();
     </script>
 </body>
 </html>
